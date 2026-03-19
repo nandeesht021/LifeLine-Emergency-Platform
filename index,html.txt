@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>LifeLine Emergency Platform</title>
+</head>
+
+<body>
+
+<h1>🚑 LifeLine Emergency System</h1>
+
+<button onclick="sendEmergency()">Request Emergency Help</button>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, addDoc, collection } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDY45Ro-y4tk-hUGUsx8vqkZmrsgb9PWs4",
+  authDomain: "lifeline-hackathon-77a81.firebaseapp.com",
+  projectId: "lifeline-hackathon-77a81",
+  storageBucket: "lifeline-hackathon-77a81.firebasestorage.app",
+  messagingSenderId: "821234616816",
+  appId: "1:821234616816:web:b6160f21b12ef71a5b3535"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+async function sendEmergency() {
+  await addDoc(collection(db, "emergency_requests"), {
+    name: "User",
+    location: "Bengaluru",
+    status: "pending"
+  });
+
+  alert("Emergency request sent!");
+}
+
+window.sendEmergency = sendEmergency;
+
+</script>
+
+</body>
+</html>
