@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>LifeLine Emergency Platform</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #f4f4f4;
+            padding: 30px;
+        }
+
+        h1 {
+            color: #d32f2f;
+        }
+
+        button {
+            padding: 15px;
+            font-size: 18px;
+            background: red;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #b71c1c;
+        }
+
+        .hospital-card {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <h1>🚑 LifeLine Emergency Platform</h1>
+
+    <h2>Nearby Hospitals</h2>
+
+    <p>Find nearby hospitals and request emergency help instantly.</p>
+
+    <button onclick="sendEmergency()">Request Emergency Help</button>
+
+    <h2>Available Hospitals</h2>
+
+    <div id="hospitalList"></div>
+
+    <script type="module">
+
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+        import {
+            getFirestore,
+            addDoc,
+            collection,
+            getDocs
+        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+
+        const firebaseConfig = {
+
+            apiKey: "AIzaSyDY45Ro-y4tk-hUGUsx8vqkZmrsgb9PWs4",
+
+            authDomain: "lifeline-hackathon-77a81.firebaseapp.com",
+
+            projectId: "lifeline-hackathon-77a81",
+
+            storageBucket: "lifeline-hackathon-77a81.firebasestorage.app",
+
+            messagingSenderId: "821234616816",
+
+            appId: "1:821234616816:web:b6160f21b12ef71a5b3535"
+
+        };
+
+
+        const app = initializeApp(firebaseConfig);
+
+        const db = getFirestore(app);
+
+
+        async function sendEmergency() {
+
+            await addDoc(collection(db, "emergency_requests"), {
+
+                name: "User",
+
+                location: "Bengaluru",
+
+                status: "pending"
+
+            });
+
+            alert("Emergency request sent!");
+
+        }
+
+
+        window.sendEmergency = sendEmergency;
+
+
+
+        async function loadHospitals() {
+
+            const querySnapshot = await getDocs(collection(db, "hospitals"));
+
+            const list = document.getElementById("hospitalList");
+
+            list.innerHTML = "";
+
+
+            querySnapshot.forEach((doc) => {
+
+                const hospital = doc.data();
+
+                list.innerHTML += `
+
+<div class="hospital-card">
+
+<h3>${hospital.hospital_name}</h3>
+
+<p><b>City:</b> ${hospital.city}</p>
+
+<p><b>Beds Available:</b> ${hospital.beds_available}</p>
+
+<p><b>Ambulance:</b> ${hospital.ambulance_available ? "Available 🚑" : "Not Available ❌"}</p>
+
+</div>
+
+`;
+
+            });
+
+        }
+
+
+        loadHospitals();
+
+    </script>
+
+</body>
+
+</html>
